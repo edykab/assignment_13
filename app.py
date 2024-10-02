@@ -1,11 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from sqlalchemy import create_engine, text
+from datetime import datetime
 from models.models import *
 import hashlib
 
+
+
+
 app = Flask(__name__)
-app.secret_key="somesupersecretkey"
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+mysqlconnector://root:edykab247@localhost/sti_data'
+app.secret_key = "secretkey"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:edykab@localhost/sti_data"
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], echo=True)
 
 Base.metadata.create_all(engine)
@@ -280,91 +284,215 @@ def update_profile():
                 msg = 'The client does not exist.'
                 return redirect(url_for('home', msg = msg))
             
-
-
-
-
-
-
-         # Route to update an existing record for the Chlamydia and Gonorrhea form
-@app.route('/update_chlamydia_gonorrhea', methods=['POST'])
-def update_chlamydia_gonorrhea():
-    msg=""
-    client_id = request.form['unique_id']
-    if 'loggedin' in session:
-        if client_id:
-            #get the client data from the database
-            with engine.connect() as con:
-                result_profile = con.execute(text(f"SELECT * FROM client_profile WHERE unique_id = '{client_id}'"))
-                client_profile = result_profile.fetchone()
-                con.commit()
-            if client_profile:
-                update_at = datetime.now()
-                updated_by = session['username']
-                date_of_screening = request.form['date_of_screening']
-                health_care_provider = request.form['health_care_provider']
-                reporter_name = request.form['reporter_name']
-                reporter_contact = request.form['reporter_contact']
-                sexual_partner_gender = request.form['sexual_partner_gender']
-                sexual_partner_gender_identity = request.form['sexual_partner_gender_identity']
-                previous_hiv_screening = request.form['previous_hiv_screening']
-                previous_hiv_screening_date = request.form['previous_hiv_screening_date']
-                previous_hiv_screening_result = request.form['previous_hiv_screening_result']
-                reason_for_testing = request.form['reason_for_testing']
-                screening_type = request.form['screening_type']
-                site_of_sample_collection = request.form['site_of_sample_collection']
-                sample_collection_date = request.form['sample_collection_date']
-                screening_result = request.form['screening_result']
-                screening_notes = request.form['screening_notes']
-                diagnosis = request.form['diagnosis']
-                date_of_treatment = request.form['date_of_treatment']
-                treatment_health_care_provider = request.form['treatment_health_care_provider']
-                treatment_reporter_name = request.form['treatment_reporter_name']
-                treatment_reporter_contact = request.form['treatment_reporter_contact']
-                treatment_type = request.form['treatment_type']
-                treatment_plan = request.form['treatment_plan']
-                treatment_notes = request.form['treatment_notes']
-                treatment_result = request.form['treatment_result']
-                partner_unique_id = request.form['partner_unique_id']
-                date_of_partner_management = request.form['date_of_partner_management']
-                partner_management_health_care_provider = request.form['partner_management_health_care_provider']
-                partner_management_reporter_name = request.form['partner_management_reporter_name']
-                partner_management_reporter_contact = request.form['partner_management_reporter_contact']
-                partner_management_type = request.form['partner_management_type']
-                partner_management_plan = request.form['partner_management_plan']
-                partner_management_notes = request.form['partner_management_notes']
-                partner_management_result = request.form['partner_management_result']
-                
-                with engine.connect() as con:
-                    result1 = con.execute(text(f"UPDATE client_screening_sti SET updated_at = '{update_at}', updated_by = '{updated_by}',\
-                                              date_of_screening = '{date_of_screening}',health_care_provider = '{health_care_provider}',\
-                                              reporter_name = '{reporter_name}',reporter_contact = '{reporter_contact}',\
-                                              sexual_partner_gender = '{sexual_partner_gender}',sexual_partner_gender_identity = '{sexual_partner_gender_identity}',\
-                                              previous_hiv_screening = '{previous_hiv_screening}',previous_hiv_screening_date = '{previous_hiv_screening_date}',\
-                                              previous_hiv_screening_result = '{previous_hiv_screening_result}',reason_for_testing = '{reason_for_testing}',\
-                                              screening_type = '{screening_type}',site_of_sample_collection = '{site_of_sample_collection}',\
-                                              sample_collection_date = '{sample_collection_date}',screening_result = '{screening_result}',\
-                                              screening_notes = '{screening_notes}',diagnosis = '{diagnosis}' WHERE unique_id = '{client_id}'"))
-                    
-                    result2 = con.execute(text(f"UPDATE client_screening_sti SET updated_at = '{update_at}', updated_by = '{updated_by}',\
-                                              date_of_treatment = '{date_of_treatment}',health_care_provider = '{treatment_health_care_provider}',\
-                                              reporter_name = '{treatment_reporter_name}',reporter_contact = '{treatment_reporter_contact}',\
-                                              treatment_type = '{treatment_type}',treatment_plan = '{treatment_plan}',\
-                                              treatment_notes = '{treatment_notes}',treatment_result = '{treatment_result}' WHERE unique_id = '{client_id}'"))
-                    
-                    result2 = con.execute(text(f"UPDATE client_screening_sti SET updated_at = '{update_at}', updated_by = '{updated_by}',\
-                                              partner_unique_id = '{partner_unique_id}',date_of_partner_management = '{date_of_partner_management}',\
-                                              health_care_provider = '{partner_management_health_care_provider}',reporter_name = '{partner_management_reporter_name}',\
-                                              reporter_contact = '{partner_management_reporter_contact}',partner_management_type = '{partner_management_type}',\
-                                              partner_management_plan = '{partner_management_plan}',partner_management_notes = '{partner_management_notes}',\
-                                              partner_management_result = '{partner_management_result}'  WHERE unique_id = '{client_id}'"))
-                    con.commit()
-                msg = "Client profile updated successfully"
-                return render_template('home.html', msg=msg)
-                
-            else:
-                #redirect to the home page
-                msg = 'The client does not exist.'
-                return redirect(url_for('home', msg = msg))
             
-        
+            
+#Route to insert a newly created record for the chlamydia and gonorrhea form into all the relevant tables
+
+@app.route('/insert_sti_data', methods=['POST'])
+def insert_sti_data():
+    if 'loggedin' in session:
+        unique_id = request.form['unique_id']
+        created_at = datetime.now()
+        updated_at = datetime.now()
+        created_by = session['username']
+        updated_by = session['username']
+
+        # ClientScreening data
+        screening_data = {
+            'date_of_screening': request.form['date_of_screening'],
+            'health_care_provider': request.form['health_care_provider'],
+            'reporter_name': request.form['reporter_name'],
+            'reporter_contact': request.form['reporter_contact'],
+            'sexual_partner_gender': request.form['sexual_partner_gender'],
+            'sexual_partner_gender_identity': request.form['sexual_partner_gender_identity'],
+            'previous_HIV_screening': request.form['previous_HIV_screening'],
+            'previous_HIV_screening_date': request.form['previous_HIV_screening_date'],
+            'previous_HIV_screening_result': request.form['previous_HIV_screening_result'],
+            'reason_for_testing': request.form['reason_for_testing'],
+            'screening_type': request.form['screening_type'],
+            'site_of_sample_collection': request.form['site_of_sample_collection'],
+            'sample_collection_date': request.form['sample_collection_date'],
+            'screening_result': request.form['screening_result'],
+            'screening_notes': request.form['screening_notes'],
+            'diagnosis': request.form['diagnosis']
+        }
+
+        # ClientTreatment data
+        treatment_data = {
+            'date_of_treatment': request.form['date_of_treatment'],
+            'treatment_type': request.form['treatment_type'],
+            'treatment_plan': request.form['treatment_plan'],
+            'treatment_notes': request.form['treatment_notes'],
+            'treatment_result': request.form['treatment_result']
+        }
+
+        # PartnerManagement data
+        partner_data = {
+            'date_of_partner_management': request.form['date_of_partner_management'],
+            'partner_management_type': request.form['partner_management_type'],
+            'partner_management_plan': request.form['partner_management_plan'],
+            'partner_management_notes': request.form['partner_management_notes'],
+            'partner_management_result': request.form['partner_management_result']
+        }
+
+        with engine.connect() as con:
+            # Insert ClientScreening data
+            screening_query = f"""
+            INSERT INTO client_screening_sti 
+            (unique_id, created_at, updated_at, created_by, updated_by, 
+            date_of_screening, health_care_provider, reporter_name, reporter_contact, 
+            sexual_partner_gender, sexual_partner_gender_identity, previous_HIV_screening, 
+            previous_HIV_screening_date, previous_HIV_screening_result, reason_for_testing, 
+            screening_type, site_of_sample_collection, sample_collection_date, screening_result, 
+            screening_notes, diagnosis) 
+            VALUES 
+            ('{unique_id}', '{created_at}', '{updated_at}', '{created_by}', '{updated_by}', 
+            '{screening_data['date_of_screening']}', '{screening_data['health_care_provider']}', 
+            '{screening_data['reporter_name']}', '{screening_data['reporter_contact']}', 
+            '{screening_data['sexual_partner_gender']}', '{screening_data['sexual_partner_gender_identity']}', 
+            '{screening_data['previous_HIV_screening']}', '{screening_data['previous_HIV_screening_date']}', 
+            '{screening_data['previous_HIV_screening_result']}', '{screening_data['reason_for_testing']}', 
+            '{screening_data['screening_type']}', '{screening_data['site_of_sample_collection']}', 
+            '{screening_data['sample_collection_date']}', '{screening_data['screening_result']}', 
+            '{screening_data['screening_notes']}', '{screening_data['diagnosis']}')
+            """
+            con.execute(text(screening_query))
+
+            # Insert ClientTreatment data
+            treatment_query = f"""
+            INSERT INTO client_treatment_sti 
+            (unique_id, created_at, updated_at, created_by, updated_by, 
+            date_of_treatment, treatment_type, treatment_plan, treatment_notes, treatment_result) 
+            VALUES 
+            ('{unique_id}', '{created_at}', '{updated_at}', '{created_by}', '{updated_by}', 
+            '{treatment_data['date_of_treatment']}', '{treatment_data['treatment_type']}', 
+            '{treatment_data['treatment_plan']}', '{treatment_data['treatment_notes']}', 
+            '{treatment_data['treatment_result']}')
+            """
+            con.execute(text(treatment_query))
+
+            # Insert PartnerManagement data
+            partner_query = f"""
+            INSERT INTO partner_management_sti 
+            (unique_id, created_at, updated_at, created_by, updated_by, 
+            date_of_partner_management, partner_management_type, partner_management_plan, 
+            partner_management_notes, partner_management_result) 
+            VALUES 
+            ('{unique_id}', '{created_at}', '{updated_at}', '{created_by}', '{updated_by}', 
+            '{partner_data['date_of_partner_management']}', '{partner_data['partner_management_type']}', 
+            '{partner_data['partner_management_plan']}', '{partner_data['partner_management_notes']}', 
+            '{partner_data['partner_management_result']}')
+            """
+            con.execute(text(partner_query))
+
+            con.commit()
+
+        msg = 'STI data inserted successfully.'
+        return redirect(url_for('home', msg=msg))
+    return redirect(url_for('login'))
+
+
+
+# route to update the existing record for the Chlamydia and Gonorrhea form
+
+@app.route('/update_sti_data', methods=['POST'])
+def update_sti_data():
+    if 'loggedin' in session:
+        unique_id = request.form['unique_id']
+        updated_at = datetime.now()
+        updated_by = session['username']
+
+        # ClientScreening data
+        screening_data = {
+            'date_of_screening': request.form['date_of_screening'],
+            'health_care_provider': request.form['health_care_provider'],
+            'reporter_name': request.form['reporter_name'],
+            'reporter_contact': request.form['reporter_contact'],
+            'sexual_partner_gender': request.form['sexual_partner_gender'],
+            'sexual_partner_gender_identity': request.form['sexual_partner_gender_identity'],
+            'previous_HIV_screening': request.form['previous_HIV_screening'],
+            'previous_HIV_screening_date': request.form['previous_HIV_screening_date'],
+            'previous_HIV_screening_result': request.form['previous_HIV_screening_result'],
+            'reason_for_testing': request.form['reason_for_testing'],
+            'screening_type': request.form['screening_type'],
+            'site_of_sample_collection': request.form['site_of_sample_collection'],
+            'sample_collection_date': request.form['sample_collection_date'],
+            'screening_result': request.form['screening_result'],
+            'screening_notes': request.form['screening_notes'],
+            'diagnosis': request.form['diagnosis']
+        }
+
+        # ClientTreatment data
+        treatment_data = {
+            'date_of_treatment': request.form['date_of_treatment'],
+            'treatment_type': request.form['treatment_type'],
+            'treatment_plan': request.form['treatment_plan'],
+            'treatment_notes': request.form['treatment_notes'],
+            'treatment_result': request.form['treatment_result']
+        }
+
+        # PartnerManagement data
+        partner_data = {
+            'date_of_partner_management': request.form['date_of_partner_management'],
+            'partner_management_type': request.form['partner_management_type'],
+            'partner_management_plan': request.form['partner_management_plan'],
+            'partner_management_notes': request.form['partner_management_notes'],
+            'partner_management_result': request.form['partner_management_result']
+        }
+
+        with engine.connect() as con:
+            # Update ClientScreening data
+            screening_query = f"""
+            UPDATE client_screening_sti 
+            SET updated_at = '{updated_at}', updated_by = '{updated_by}', 
+            date_of_screening = '{screening_data['date_of_screening']}', 
+            health_care_provider = '{screening_data['health_care_provider']}', 
+            reporter_name = '{screening_data['reporter_name']}', 
+            reporter_contact = '{screening_data['reporter_contact']}', 
+            sexual_partner_gender = '{screening_data['sexual_partner_gender']}', 
+            sexual_partner_gender_identity = '{screening_data['sexual_partner_gender_identity']}', 
+            previous_HIV_screening = '{screening_data['previous_HIV_screening']}', 
+            previous_HIV_screening_date = '{screening_data['previous_HIV_screening_date']}', 
+            previous_HIV_screening_result = '{screening_data['previous_HIV_screening_result']}', 
+            reason_for_testing = '{screening_data['reason_for_testing']}', 
+            screening_type = '{screening_data['screening_type']}', 
+            site_of_sample_collection = '{screening_data['site_of_sample_collection']}', 
+            sample_collection_date = '{screening_data['sample_collection_date']}', 
+            screening_result = '{screening_data['screening_result']}', 
+            screening_notes = '{screening_data['screening_notes']}', 
+            diagnosis = '{screening_data['diagnosis']}' 
+            WHERE unique_id = '{unique_id}'
+            """
+            con.execute(text(screening_query))
+
+            # Update ClientTreatment data
+            treatment_query = f"""
+            UPDATE client_treatment_sti 
+            SET updated_at = '{updated_at}', updated_by = '{updated_by}', 
+            date_of_treatment = '{treatment_data['date_of_treatment']}', 
+            treatment_type = '{treatment_data['treatment_type']}', 
+            treatment_plan = '{treatment_data['treatment_plan']}', 
+            treatment_notes = '{treatment_data['treatment_notes']}', 
+            treatment_result = '{treatment_data['treatment_result']}' 
+            WHERE unique_id = '{unique_id}'
+            """
+            con.execute(text(treatment_query))
+
+            # Update PartnerManagement data
+            partner_query = f"""
+            UPDATE partner_management_sti 
+            SET updated_at = '{updated_at}', updated_by = '{updated_by}', 
+            date_of_partner_management = '{partner_data['date_of_partner_management']}', 
+            partner_management_type = '{partner_data['partner_management_type']}', 
+            partner_management_plan = '{partner_data['partner_management_plan']}', 
+            partner_management_notes = '{partner_data['partner_management_notes']}', 
+            partner_management_result = '{partner_data['partner_management_result']}' 
+            WHERE unique_id = '{unique_id}'
+            """
+            con.execute(text(partner_query))
+
+            con.commit()
+
+        msg = 'STI data updated successfully.'
+        return redirect(url_for('home', msg=msg))
+    return redirect(url_for('login'))

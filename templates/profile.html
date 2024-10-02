@@ -135,129 +135,130 @@
             </nav>
             <nav class="tabpage" id="tabpage_2">
                 <p>Chlaymdia and Gonorrhea</p>
-                                
-                <form method="post" action="/update_chlamydia_gonorrhea">
-
-                    <h3>Screening Information:</h3>
-                    <label for="date_of_screening">Date of Screening</label>
-                    <input type="date" name="date_of_screening" id="date_of_screening" value="{{ client_screening_sti.date_of_screening | default('') }}" required>
-
-                    <label for="health_care_provider">Health Care Provider:</label>
-                    <input type="text" id="health_care_provider" name="health_care_provider" value="{{ client_screening_sti.health_care_provider | default('') }}">
-
-                    <label for="reporter_name">Reporter Name:</label>
-                    <input type="text" id="reporter_name" name="reporter_name" value="{{ client_screening_sti.reporter_name | default('') }}">
-
-                    <label for="reporter_contact">Reporter Contact:</label>
-                    <input type="text" id="reporter_contact" name="reporter_contact" value="{{ client_screening_sti.reporter_contact | default('') }}">
-
-                    <label for="sexual_partner_gender">Sexual Partner Gender:</label>
-                    <input type="text" id="sexual_partner_gender" name="sexual_partner_gender" value="{{ client_screening_sti.sexual_partner_gender | default('') }}">
-
-                    <label for="sexual_partner_gender_identity">Sexual Partner Gender Identity:</label>
-                    <input type="text" id="sexual_partner_gender_identity" name="sexual_partner_gender_identity" value="{{ client_screening_sti.sexual_partner_gender_identity | default('') }}">
-
-                    <h3>Previous Testing:</h3>
-
-                    <label>Previous HIV Screening:</label>
-                    <input type="radio" id="previous_hiv_screening" name="previous_hiv_screening" value="{{ client_screening_sti.previous_hiv_screening | default('') }}">
-                    <input type="radio" id="previous_hiv_screening" name="previous_hiv_screening" value="Yes">Yes
-                    <input type="radio" id="previous_hiv_screening" name="previous_hiv_screening" value="No">No
-
-                    <label for="previous_hiv_screening_date">Previous HIV Screening Date:</label>
-                    <input type="date" id="previous_hiv_screening_date" name="previous_hiv_screening_date" value="{{ client_screening_sti.previous_hiv_screening_date | default('') }}">
-
-                    <label for="previous_hiv_screening_result">Previous HIV Screening Result:</label>
-                    <input type="text" id="previous_hiv_screening_result" name="previous_hiv_screening_result" value="{{ client_screening_sti.previous_hiv_screening_result | default('') }}">
-
-                    <h3>Reason for Testing:</h3>
-
-                    <label for="reason_for_testing">Select Reason:</label>
-                    <select id="reason_for_testing" name="reason_for_testing">
-                        <option value="{{ client_screening_sti.reason_for_testing | default('') }}">Select</option>
-                        <option value="Symptom screening">Symptom screening</option>
-                        <option value="Partner notification">Partner notification</option>
-                        <option value="Pre-exposure prophylaxis (PrEP)">Pre-exposure prophylaxis (PrEP)</option>
-                        <option value="Other">Other</option>
-                    </select>
-
-                    <h3>Screening Details:</h3>
-
-                    <label for="screening_type">Screening Type:</label>
-                    <input type="text" id="screening_type" name="screening_type" value="{{ client_screening_sti.screening_type | default('') }}">
-
-                    <label for="site_of_sample_collection">Site of Sample Collection:</label>
-                    <input type="text" id="site_of_sample_collection" name="site_of_sample_collection" value="{{ client_screening_sti.site_of_sample_collection | default('') }}">
-
-                    <label for="sample_collection_date">Sample Collection Date:</label>
-                    <input type="date" id="sample_collection_date" name="sample_collection_date" value="{{ client_screening_sti.sample_collection_date | default('') }}">
-
-                    <label for="screening_result">Screening Result:</label>
-                    <input type="text" id="screening_result" name="screening_result" value="{{ client_screening_sti.screening_result | default('') }}">
-
-                    <label for="screening_notes">Screening Notes:</label>
-                    <textarea id="screening_notes" name="screening_notes" value="{{ client_screening_sti.screening_notes | default('') }}"></textarea>
-
-                    <label for="diagnosis">Diagnosis:</label>
-                    <input type="text" id="diagnosis" name="diagnosis" value="{{ client_screening_sti.diagnosis | default('') }}">
-
-                    <h3>Treatment Information:</h3>
-
-                    <label for="date_of_treatment">Date of Treatment:</label>
-                    <input type="date" id="date_of_treatment" name="date_of_treatment" value="{{client_treatment_sti.date_of_treatment | default('') }}">
-
-                    <label for="treatment_health_care_provider">Health Care Provider:</label>
-                    <input type="text" id="treatment_health_care_provider" name="treatment_health_care_provider" value="{{client_treatment_sti.health_care_provider | default('') }}">
-
-                    <label for="treatment_reporter_name">Reporter Name:</label>
-                    <input type="text" id="treatment_reporter_name" name="treatment_reporter_name" value="{{client_treatment_sti.reporter_name | default('') }}">
-
-                    <label for="treatment_reporter_contact">Reporter Contact:</label>
-                    <input type="text" id="treatment_reporter_contact" name="treatment_reporter_contact" value="{{client_treatment_sti.reporter_contact | default('') }}">
-
-                    <label for="treatment_type">Treatment Type:</label>
-                    <input type="text" id="treatment_type" name="treatment_type" value="{{client_treatment_sti.treatment_type | default('') }}">
-
-                    <label for="treatment_plan">Treatment Plan:</label>
-                    <textarea id="treatment_plan" name="treatment_plan" value="{{client_treatment_sti.treatmentt_plan | default('') }}"></textarea>
-
-                    <label for="treatment_notes">Treatment Notes:</label>
-                    <textarea id="treatment_notes" name="treatment_notes" value="{{client_treatment_sti.treatment_notes | default('') }}"></textarea>
-
-                    <label for="treatment_result">Treatment Result:</label>
-                    <input type="text" id="treatment_result" name="treatment_result" value="{{client_treatment_sti.treatment_result | default('') }}">
-
-                    <h3>Partner Management:</h3>
-
-                    <label for="partner_unique_id">Partner Unique ID:</label>
-                    <input type="text" id="partner_unique_id" name="partner_unique_id" value="{{partner_management_sti.partner_unique_id | default('') }}">
-
-                    <label for="date_of_partner_management">Date of Partner Management:</label>
-                    <input type="date" id="date_of_partner_management" name="date_of_partner_management" value="{{partner_management_sti.date_of_partner_management | default('') }}">
-
-                    <label for="partner_management_health_care_provider">Health Care Provider:</label>
-                    <input type="text" id="partner_management_health_care_provider" name="partner_management_health_care_provider" value="{{partner_management_sti.health_care_provider | default('') }}">
-
-                    <label for="partner_management_reporter_name">Reporter Name:</label>
-                    <input type="text" id="partner_management_reporter_name" name="partner_management_reporter_name" value="{{partner_management_sti.reporter_name | default('') }}">
-
-                    <label for="partner_management_reporter_contact">Reporter Contact:</label>
-                    <input type="text" id="partner_management_reporter_contact" name="partner_management_reporter_contact" value="{{partner_management_sti.reporter_contact | default('') }}">
-
-                    <label for="partner_management_type">Partner Management Type:</label>
-                    <input type="text" id="partner_management_type" name="partner_management_type" value="{{partner_management_sti.partner_management_type | default('') }}">
-
-                    <label for="partner_management_plan">Partner Management Plan:</label>
-                    <textarea id="partner_management_plan" name="partner_management_plan" value="{{partner_management_sti.partner_management_plan | default('') }}"></textarea>
-
-                    <label for="partner_management_notes">Partner Management Notes:</label>
-                    <textarea id="partner_management_notes" name="partner_management_notes" value="{{partner_management_sti.partner_management_notes | default('') }}"></textarea>
-
-                    <label for="partner_management_result">Partner Management Result:</label>
-                    <input type="text" id="partner_management_result" name="partner_management_result" value="{{partner_management_sti.partner_management_result | default('') }}">
-                    <input type="submit" value="Submit Chlamydia and Gonorrhea Data" class="btn btn-primary">
-
+                <form method="POST" action="{{ url_for('update_sti_data') }}">
+                    <!-- ClientScreening Fields -->
+                    <h4>Screening Information</h4>
+                    <div class="form-group">
+                        <label for="date_of_screening">Date of Screening:</label>
+                        <input type="date" id="date_of_screening" name="date_of_screening" value="{{ client_screening.date_of_screening }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="health_care_provider">Health Care Provider:</label>
+                        <input type="text" id="health_care_provider" name="health_care_provider" value="{{ client_screening.health_care_provider }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="reporter_name">Reporter Name:</label>
+                        <input type="text" id="reporter_name" name="reporter_name" value="{{ client_screening.reporter_name }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="reporter_contact">Reporter Contact:</label>
+                        <input type="text" id="reporter_contact" name="reporter_contact" value="{{ client_screening.reporter_contact }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="sexual_partner_gender">Sexual Partner Gender:</label>
+                        <input type="text" id="sexual_partner_gender" name="sexual_partner_gender" value="{{ client_screening.sexual_partner_gender }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="sexual_partner_gender_identity">Sexual Partner Gender Identity:</label>
+                        <input type="text" id="sexual_partner_gender_identity" name="sexual_partner_gender_identity" value="{{ client_screening.sexual_partner_gender_identity }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="previous_HIV_screening">Previous HIV Screening:</label>
+                        <select id="previous_HIV_screening" name="previous_HIV_screening" class="form-control">
+                            <option value="Yes" {% if client_screening.previous_HIV_screening == 'Yes' %}selected{% endif %}>Yes</option>
+                            <option value="No" {% if client_screening.previous_HIV_screening == 'No' %}selected{% endif %}>No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="previous_HIV_screening_date">Previous HIV Screening Date:</label>
+                        <input type="date" id="previous_HIV_screening_date" name="previous_HIV_screening_date" value="{{ client_screening.previous_HIV_screening_date }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="previous_HIV_screening_result">Previous HIV Screening Result:</label>
+                        <input type="text" id="previous_HIV_screening_result" name="previous_HIV_screening_result" value="{{ client_screening.previous_HIV_screening_result }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="reason_for_testing">Reason for Testing:</label>
+                        <input type="text" id="reason_for_testing" name="reason_for_testing" value="{{ client_screening.reason_for_testing }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="screening_type">Screening Type:</label>
+                        <select id="screening_type" name="screening_type" class="form-control">
+                            <option value="Chlamydia" {% if client_screening.screening_type == 'Chlamydia' %}selected{% endif %}>Chlamydia</option>
+                            <option value="Gonorrhea" {% if client_screening.screening_type == 'Gonorrhea' %}selected{% endif %}>Gonorrhea</option>
+                            <option value="Both" {% if client_screening.screening_type == 'Both' %}selected{% endif %}>Both</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="site_of_sample_collection">Site of Sample Collection:</label>
+                        <input type="text" id="site_of_sample_collection" name="site_of_sample_collection" value="{{ client_screening.site_of_sample_collection }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="sample_collection_date">Sample Collection Date:</label>
+                        <input type="date" id="sample_collection_date" name="sample_collection_date" value="{{ client_screening.sample_collection_date }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="screening_result">Screening Result:</label>
+                        <input type="text" id="screening_result" name="screening_result" value="{{ client_screening.screening_result }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="screening_notes">Screening Notes:</label>
+                        <textarea id="screening_notes" name="screening_notes" class="form-control">{{ client_screening.screening_notes }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="diagnosis">Diagnosis:</label>
+                        <input type="text" id="diagnosis" name="diagnosis" value="{{ client_screening.diagnosis }}" class="form-control">
+                    </div>
+            
+                    <!-- ClientTreatment Fields -->
+                    <h4>Treatment Information</h4>
+                    <div class="form-group">
+                        <label for="date_of_treatment">Date of Treatment:</label>
+                        <input type="date" id="date_of_treatment" name="date_of_treatment" value="{{ client_treatment.date_of_treatment }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="treatment_type">Treatment Type:</label>
+                        <input type="text" id="treatment_type" name="treatment_type" value="{{ client_treatment.treatment_type }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="treatment_plan">Treatment Plan:</label>
+                        <textarea id="treatment_plan" name="treatment_plan" class="form-control">{{ client_treatment.treatment_plan }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="treatment_notes">Treatment Notes:</label>
+                        <textarea id="treatment_notes" name="treatment_notes" class="form-control">{{ client_treatment.treatment_notes }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="treatment_result">Treatment Result:</label>
+                        <input type="text" id="treatment_result" name="treatment_result" value="{{ client_treatment.treatment_result }}" class="form-control">
+                    </div>
+            
+                    <!-- PartnerManagement Fields -->
+                    <h4>Partner Management</h4>
+                    <div class="form-group">
+                        <label for="date_of_partner_management">Date of Partner Management:</label>
+                        <input type="date" id="date_of_partner_management" name="date_of_partner_management" value="{{ partner_management.date_of_partner_management }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="partner_management_type">Partner Management Type:</label>
+                        <input type="text" id="partner_management_type" name="partner_management_type" value="{{ partner_management.partner_management_type }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="partner_management_plan">Partner Management Plan:</label>
+                        <textarea id="partner_management_plan" name="partner_management_plan" class="form-control">{{ partner_management.partner_management_plan }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="partner_management_notes">Partner Management Notes:</label>
+                        <textarea id="partner_management_notes" name="partner_management_notes" class="form-control">{{ partner_management.partner_management_notes }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="partner_management_result">Partner Management Result:</label>
+                        <input type="text" id="partner_management_result" name="partner_management_result" value="{{ partner_management.partner_management_result }}" class="form-control">
+                    </div>
+            
+                    <button type="submit" class="btn btn-primary">Update STI Data</button>
                 </form>
+            
             </nav>
             <nav class="tabpage" id="tabpage_3">
                 <p>Hepatitis B Reporting</p>
